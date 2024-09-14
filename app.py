@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, jsonify
-from flask_socketio import SocketIO, send, emit
 import eventlet
 eventlet.monkey_patch()
+
+from flask import Flask, render_template
+from flask_socketio import SocketIO, send, emit
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -26,4 +27,5 @@ def handle_message(data):
     send({'user': user, 'message': message, 'color': color}, broadcast=True)
 
 if __name__ == '__main__':
-    socketio.run(app, host='0.0.0.0', port=5000)
+    # Use eventlet to run the application
+    socketio.run(app, host='0.0.0.0', port=5000, debug=True)
