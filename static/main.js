@@ -32,7 +32,8 @@ function enterChat() {
     if (username) {
         userColor = getRandomColor();
         $('#popup').hide();
-        $('#chat').show();
+        $('#chat').removeClass('display_none').addClass('display_flex'); // Troca a classe para exibir o chat
+
         socket.emit('join', { username: username, color: userColor });
     }
 }
@@ -42,12 +43,17 @@ socket.on('notification', function(msg){
     $('#messages').append($('<div>').text(msg));
 });
 
-socket.on('message', function(data){
+// Chame essa função toda vez que uma nova mensagem for adicionada
+socket.on('message', function(data) {
     const { user, message, color } = data;
     $('#messages').append($('<div>').html(`
         <span class="username" style="color:${color};">${user}:</span> 
         <span class="text-message">${message}</span>
     `));
+    
+    // Desce automaticamente ao receber uma nova mensagem
+    scrollToBottom();
+
 
     // Adiciona um evento de clique às imagens das cartas para abrir no modal
     $('#messages img').off('click').on('click', function() {
@@ -60,8 +66,11 @@ function sendMessage() {
     if (message) {
         socket.emit('message', { user: username, message: message, color: userColor });
         $('#message').val('');
+        
+        // Desce automaticamente ao enviar uma nova mensagem
+        scrollToBottom();
     }
-}
+}       
 
 function openCardSearch() {
     $('#card-search-popup').show();
@@ -129,9 +138,19 @@ function showNotification(message) {
 // Funções para abrir e fechar o modal da imagem
 function openCardModal(src) {
     $('#card-modal-image').attr('src', src);
-    $('#card-modal').show();
+    $('#card-modal').addClass('display_flex_on');
 }
 
 function closeCardModal() {
     $('#card-modal').hide();
+    $('#card-modal').removeClass('display_flex_off');
+}
+function closeCardSearch() {
+    $('#card-search-popup').hide();
+}
+
+// Função para descer automaticamente a tela de mensagens
+function scrollToBottom() {
+    const messages = document.getElementById('messages');
+    messages.scrollTop = messages.scrollHeight; // Define a rolagem para o fim do conteúdo
 }
