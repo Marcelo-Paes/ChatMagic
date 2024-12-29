@@ -8,3 +8,6 @@ Esta aplicação permite comunicação em tempo real entre usuários através de
 - Entrada de usuários com nome de usuário e cor personalizada.
 - Notificações quando um usuário entra no chat.
 - Transmissão de mensagens para todos os usuários conectados, exibidas na cor escolhida pelo remetente.
+
+
+Acesse: https://chatmagic.onrender.com/
